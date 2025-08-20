@@ -1,29 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { appointmentSchema, ApiResponse, Appointment } from "@/lib/types";
-
-// In-memory store for appointments
-let appointments: Appointment[] = [
-  {
-    id: "1",
-    customerId: "1",
-    customerName: "Jane Smith",
-    customerPhone: "555-0123",
-    customerEmail: "jane.smith@email.com",
-    serviceId: "1",
-    serviceName: "Women's Haircut & Style",
-    stylistId: "1",
-    stylistName: "Sarah Johnson",
-    date: "2024-01-20",
-    time: "10:00",
-    duration: 60,
-    price: 65,
-    status: "scheduled",
-    notes: "First time client",
-    isWalkIn: false,
-    createdAt: new Date("2024-01-15"),
-    updatedAt: new Date("2024-01-15"),
-  }
-];
+import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
   try {
@@ -31,19 +8,32 @@ export async function GET(request: NextRequest) {
     const date = searchParams.get("date");
     const customerPhone = searchParams.get("customerPhone");
 
-    let filteredAppointments = appointments;
-
+    // Build where clause for filtering
+    const where: any = {};
+    
     if (date) {
-      filteredAppointments = filteredAppointments.filter(a => a.date === date);
+      where.date = date;
     }
 
     if (customerPhone) {
-      filteredAppointments = filteredAppointments.filter(a => a.customerPhone === customerPhone);
+      where.customerPhone = customerPhone;
     }
+
+    const appointments = await prisma.appointment.findMany({
+      where,
+      include: {
+        customer: true,
+        service: true,
+        stylist: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
     return NextResponse.json<ApiResponse<Appointment[]>>({
       success: true,
-      data: filteredAppointments
+      data: appointments
     });
   } catch (error) {
     console.error("Error fetching appointments:", error);
@@ -60,12 +50,16 @@ export async function POST(request: NextRequest) {
     const validatedData = appointmentSchema.parse(body);
 
     // Check for time conflicts
-    const conflictingAppointment = appointments.find(a => 
-      a.date === validatedData.date && 
-      a.time === validatedData.time &&
-      a.stylistId === validatedData.stylistId &&
-      a.status !== "cancelled"
-    );
+    const conflictingAppointment = await prisma.appointment.findFirst({
+      where: {
+        date: validatedData.date,
+        time: validatedData.time,
+        stylistId: validatedData.stylistId,
+        status: {
+          not: "CANCELLED"
+        }
+      }
+    });
 
     if (conflictingAppointment) {
       return NextResponse.json<ApiResponse<null>>({
@@ -74,15 +68,72 @@ export async function POST(request: NextRequest) {
       }, { status: 409 });
     }
 
-    const newAppointment: Appointment = {
-      ...validatedData,
-      id: Date.now().toString(),
-      status: "scheduled",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    // Get or create customer
+    let customer = await prisma.customer.findUnique({
+      where: { phone: validatedData.customerPhone }
+    });
 
-    appointments.push(newAppointment);
+    if (!customer) {
+      customer = await prisma.customer.create({
+        data: {
+          name: validatedData.customerName,
+          phone: validatedData.customerPhone,
+          email: validatedData.customerEmail || null,
+        }
+      });
+    }
+
+    // Get service and stylist details for denormalization
+    const service = await prisma.service.findUnique({
+      where: { id: validatedData.serviceId }
+    });
+
+    const stylist = await prisma.stylist.findUnique({
+      where: { id: validatedData.stylistId }
+    });
+
+    if (!service || !stylist) {
+      return NextResponse.json<ApiResponse<null>>({
+        success: false,
+        error: "Service or stylist not found"
+      }, { status: 404 });
+    }
+
+    // Create the appointment
+    const newAppointment = await prisma.appointment.create({
+      data: {
+        customerId: customer.id,
+        customerName: validatedData.customerName,
+        customerPhone: validatedData.customerPhone,
+        customerEmail: validatedData.customerEmail || null,
+        serviceId: validatedData.serviceId,
+        serviceName: service.name,
+        stylistId: validatedData.stylistId,
+        stylistName: stylist.name,
+        date: validatedData.date,
+        time: validatedData.time,
+        duration: validatedData.duration,
+        price: validatedData.price,
+        status: "SCHEDULED",
+        notes: validatedData.notes || null,
+        isWalkIn: validatedData.isWalkIn,
+      },
+      include: {
+        customer: true,
+        service: true,
+        stylist: true,
+      }
+    });
+
+    // Update customer's total visits
+    await prisma.customer.update({
+      where: { id: customer.id },
+      data: {
+        totalVisits: {
+          increment: 1
+        }
+      }
+    });
 
     return NextResponse.json<ApiResponse<Appointment>>({
       success: true,
@@ -90,6 +141,7 @@ export async function POST(request: NextRequest) {
       message: "Appointment booked successfully"
     }, { status: 201 });
   } catch (error) {
+    console.error("Error creating appointment:", error);
     if (error instanceof Error) {
       return NextResponse.json<ApiResponse<null>>({
         success: false,

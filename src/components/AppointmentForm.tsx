@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Calendar, Clock, User, Phone, Mail, Scissors } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 import { appointmentFormSchema, AppointmentFormData } from "@/lib/types";
 import { useCustomerByPhone, useCreateAppointment, useServices, useStylists } from "@/lib/hooks/useApi";
 import { Button } from "@/components/ui/button";
@@ -32,22 +33,32 @@ interface AppointmentFormProps {
 }
 
 export function AppointmentForm({ isWalkIn = false, onSuccess }: AppointmentFormProps) {
+  const { user } = useUser();
   const [searchPhone, setSearchPhone] = useState("");
   const [selectedService, setSelectedService] = useState<any>(null);
   const [selectedStylist, setSelectedStylist] = useState<any>(null);
 
+  // Get full name from Clerk user
+  const getFullName = () => {
+    if (!user) return "";
+    const firstName = user.firstName || "";
+    const lastName = user.lastName || "";
+    return `${firstName} ${lastName}`.trim();
+  };
+
   const form = useForm<AppointmentFormData>({
     resolver: zodResolver(appointmentFormSchema),
     defaultValues: {
-      customerName: "",
+      customerId: user?.id || "",
+      customerName: getFullName(), // Auto-fill with Clerk's name
       customerPhone: "",
-      customerEmail: "",
+      customerEmail: user?.emailAddresses[0]?.emailAddress || "",
       serviceId: "",
       stylistId: "",
       date: "",
       time: "",
       notes: "",
-      isWalkIn,
+      isWalkIn: isWalkIn,
     },
   });
 
@@ -68,7 +79,6 @@ export function AppointmentForm({ isWalkIn = false, onSuccess }: AppointmentForm
   // Auto-fill customer data when found
   if (customer && !form.getValues("customerName")) {
     form.setValue("customerName", customer.name);
-    form.setValue("customerEmail", customer.email || "");
   }
 
   // Get available time slots (simplified - in real app, check against existing appointments)
@@ -85,6 +95,11 @@ export function AppointmentForm({ isWalkIn = false, onSuccess }: AppointmentForm
 
   const onSubmit = async (data: AppointmentFormData) => {
     try {
+      if (!user) {
+        toast.error("Please sign in to book an appointment");
+        return;
+      }
+
       // Get service and stylist details
       const service = services?.find(s => s.id === data.serviceId);
       const stylist = stylists?.find(s => s.id === data.stylistId);
@@ -95,11 +110,21 @@ export function AppointmentForm({ isWalkIn = false, onSuccess }: AppointmentForm
       }
 
       const appointmentData = {
-        ...data,
+        customerId: user.id,
+        customerName: getFullName(), // Use Clerk's full name
+        customerPhone: data.customerPhone,
+        customerEmail: user.emailAddresses[0]?.emailAddress || "",
+        serviceId: data.serviceId,
         serviceName: service.name,
+        stylistId: data.stylistId,
         stylistName: stylist.name,
+        date: data.date,
+        time: data.time,
         duration: service.duration,
-        price: service.price,
+        price: Number(service.price),
+        status: "SCHEDULED" as const,
+        notes: data.notes || "",
+        isWalkIn: data.isWalkIn,
       };
 
       await createAppointmentMutation.mutateAsync(appointmentData);
@@ -136,59 +161,48 @@ export function AppointmentForm({ isWalkIn = false, onSuccess }: AppointmentForm
               Customer Information
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="customerName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full Name *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter full name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="customerPhone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number *</FormLabel>
-                    <div className="flex gap-2">
-                      <FormControl>
-                        <Input placeholder="(555) 123-4567" {...field} />
-                      </FormControl>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={handleCustomerSearch}
-                        disabled={customerLoading || !field.value || field.value.length < 10}
-                      >
-                        {customerLoading ? "Searching..." : "Search"}
-                      </Button>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            {/* Name display (read-only) */}
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+              <div className="flex items-center gap-2 text-gray-700">
+                <User className="w-4 h-4" />
+                <span className="font-medium">Name:</span>
+                <span>{getFullName() || "No name available"}</span>
+              </div>
             </div>
 
+            {/* Phone Number */}
             <FormField
               control={form.control}
-              name="customerEmail"
+              name="customerPhone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="email@example.com" {...field} />
-                  </FormControl>
+                  <FormLabel>Phone Number *</FormLabel>
+                  <div className="flex gap-2">
+                    <FormControl>
+                      <Input placeholder="(555) 123-4567" {...field} />
+                    </FormControl>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleCustomerSearch}
+                      disabled={customerLoading || !field.value || field.value.length < 10}
+                    >
+                      {customerLoading ? "Searching..." : "Search"}
+                    </Button>
+                  </div>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            {/* Email display (read-only) */}
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+              <div className="flex items-center gap-2 text-gray-700">
+                <Mail className="w-4 h-4" />
+                <span className="font-medium">Email:</span>
+                <span>{user?.emailAddresses[0]?.emailAddress || "No email available"}</span>
+              </div>
+            </div>
 
             {/* Customer found notification */}
             {customer && (
@@ -383,7 +397,10 @@ export function AppointmentForm({ isWalkIn = false, onSuccess }: AppointmentForm
             disabled={createAppointmentMutation.isPending}
           >
             {createAppointmentMutation.isPending ? (
-              "Booking Appointment..."
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Booking Appointment...
+              </>
             ) : (
               <>
                 <Calendar className="w-4 h-4 mr-2" />

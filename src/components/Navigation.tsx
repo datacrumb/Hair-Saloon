@@ -4,10 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Phone, Calendar } from "lucide-react";
+import { useUser, SignInButton, SignedIn, UserButton } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { user, isLoaded } = useUser();
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -48,7 +51,7 @@ const Navigation = () => {
             ))}
           </div>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons and Auth */}
           <div className="hidden md:flex items-center space-x-4">
             <Link
               href="/dashboard"
@@ -64,6 +67,21 @@ const Navigation = () => {
               <Phone className="w-4 h-4" />
               <span>(123) 456-7890</span>
             </a>
+            
+            {/* Auth Section */}
+            <div className="flex items-center gap-4">
+              {!isLoaded ? (
+                <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+              ) : user ? (
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              ) : (
+                <SignInButton>
+                  <Button>Sign In</Button>
+                </SignInButton>
+              )}
+            </div>
           </div>
 
           {/* Mobile menu button */}
@@ -109,6 +127,21 @@ const Navigation = () => {
                   <Phone className="w-4 h-4" />
                   <span>(123) 456-7890</span>
                 </a>
+                
+                {/* Mobile Auth Section */}
+                <div className="flex items-center justify-center gap-4 pt-2">
+                  {!isLoaded ? (
+                    <div className="w-8 h-8 bg-gray-200 rounded-full animate-pulse"></div>
+                  ) : user ? (
+                    <SignedIn>
+                      <UserButton />
+                    </SignedIn>
+                  ) : (
+                    <SignInButton>
+                      <Button>Sign In</Button>
+                    </SignInButton>
+                  )}
+                </div>
               </div>
             </div>
           </div>

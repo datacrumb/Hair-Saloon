@@ -1,51 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
 import { customerSchema, ApiResponse, Customer } from "@/lib/types";
-
-// In a real app, you'd use a proper database like PostgreSQL, MongoDB, etc.
-// For now, we'll use a simple in-memory store
-let customers: Customer[] = [
-  {
-    id: "1",
-    name: "Jane Smith",
-    phone: "555-0123",
-    email: "jane.smith@email.com",
-    address: "123 Main St, City, State 12345",
-    dateOfBirth: "1990-05-15",
-    notes: "Prefers Sarah for cuts, allergic to certain products",
-    createdAt: new Date("2024-01-01"),
-    updatedAt: new Date("2024-01-10"),
-  },
-  {
-    id: "2",
-    name: "Mike Johnson",
-    phone: "555-0456",
-    email: "mike.j@email.com",
-    address: "456 Oak Ave, City, State 12345",
-    dateOfBirth: "1985-08-22",
-    notes: "Likes short cuts, prefers Michael",
-    createdAt: new Date("2024-01-05"),
-    updatedAt: new Date("2024-01-08"),
-  }
-];
+import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const phone = searchParams.get("phone");
+    const email = searchParams.get("email");
 
+    const where: any = {};
+    
     if (phone) {
-      const customer = customers.find(c => c.phone === phone);
-      if (!customer) {
-        return NextResponse.json<ApiResponse<null>>({
-          success: false,
-          error: "Customer not found"
-        }, { status: 404 });
-      }
-      return NextResponse.json<ApiResponse<Customer>>({
-        success: true,
-        data: customer
-      });
+      where.phone = phone;
     }
+
+    if (email) {
+      where.email = email;
+    }
+
+    const customers = await prisma.customer.findMany({
+      where,
+      include: {
+        appointments: {
+          orderBy: {
+            createdAt: 'desc'
+          },
+          take: 5 // Get last 5 appointments
+        }
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
     return NextResponse.json<ApiResponse<Customer[]>>({
       success: true,
@@ -65,14 +51,28 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = customerSchema.parse(body);
 
-    const newCustomer: Customer = {
-      ...validatedData,
-      id: Date.now().toString(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    // Check if customer already exists
+    const existingCustomer = await prisma.customer.findUnique({
+      where: { phone: validatedData.phone }
+    });
 
-    customers.push(newCustomer);
+    if (existingCustomer) {
+      return NextResponse.json<ApiResponse<null>>({
+        success: false,
+        error: "Customer with this phone number already exists"
+      }, { status: 409 });
+    }
+
+    const newCustomer = await prisma.customer.create({
+      data: {
+        name: validatedData.name,
+        phone: validatedData.phone,
+        email: validatedData.email || null,
+        address: validatedData.address || null,
+        dateOfBirth: validatedData.dateOfBirth ? new Date(validatedData.dateOfBirth) : null,
+        notes: validatedData.notes || null,
+      }
+    });
 
     return NextResponse.json<ApiResponse<Customer>>({
       success: true,
@@ -80,6 +80,7 @@ export async function POST(request: NextRequest) {
       message: "Customer created successfully"
     }, { status: 201 });
   } catch (error) {
+    console.error("Error creating customer:", error);
     if (error instanceof Error) {
       return NextResponse.json<ApiResponse<null>>({
         success: false,

@@ -1,81 +1,72 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ApiResponse, Service } from "@/lib/types";
+import { serviceSchema, ApiResponse, Service } from "@/lib/types";
+import { prisma } from "@/lib/prisma";
 
-const services: Service[] = [
-  {
-    id: "1",
-    name: "Women's Haircut",
-    category: "Hair Cutting",
-    duration: 60,
-    price: 65,
-    description: "Professional cut and style tailored to your face shape and lifestyle"
-  },
-  {
-    id: "2",
-    name: "Men's Haircut",
-    category: "Hair Cutting",
-    duration: 45,
-    price: 35,
-    description: "Classic or modern cuts with precision styling"
-  },
-  {
-    id: "3",
-    name: "Kid's Haircut (12 & under)",
-    category: "Hair Cutting",
-    duration: 30,
-    price: 25,
-    description: "Gentle and fun haircuts for children"
-  },
-  {
-    id: "4",
-    name: "Full Color",
-    category: "Hair Coloring",
-    duration: 150,
-    price: 120,
-    description: "Complete hair color transformation with premium products"
-  },
-  {
-    id: "5",
-    name: "Highlights",
-    category: "Hair Coloring",
-    duration: 120,
-    price: 140,
-    description: "Partial or full highlights for dimension and brightness"
-  },
-  {
-    id: "6",
-    name: "Balayage",
-    category: "Hair Coloring",
-    duration: 180,
-    price: 200,
-    description: "Hand-painted highlights for natural-looking dimension"
-  },
-  {
-    id: "7",
-    name: "Blowout & Style",
-    category: "Styling & Treatments",
-    duration: 45,
-    price: 45,
-    description: "Professional blowout with your choice of styling"
-  },
-  {
-    id: "8",
-    name: "Updo/Special Occasion",
-    category: "Styling & Treatments",
-    duration: 90,
-    price: 85,
-    description: "Elegant styling for weddings, proms, and special events"
-  }
-];
-
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const category = searchParams.get("category");
+    const isActive = searchParams.get("isActive");
+
+    const where: any = {};
+    
+    if (category) {
+      where.category = category;
+    }
+
+    if (isActive !== null) {
+      where.isActive = isActive === 'true';
+    }
+
+    const services = await prisma.service.findMany({
+      where,
+      orderBy: {
+        name: 'asc',
+      },
+    });
+
     return NextResponse.json<ApiResponse<Service[]>>({
       success: true,
       data: services
     });
   } catch (error) {
     console.error("Error fetching services:", error);
+    return NextResponse.json<ApiResponse<null>>({
+      success: false,
+      error: "Internal server error"
+    }, { status: 500 });
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const validatedData = serviceSchema.parse(body);
+
+    const newService = await prisma.service.create({
+      data: {
+        name: validatedData.name,
+        category: validatedData.category,
+        duration: validatedData.duration,
+        price: validatedData.price,
+        description: validatedData.description || null,
+        isActive: validatedData.isActive ?? true,
+      }
+    });
+
+    return NextResponse.json<ApiResponse<Service>>({
+      success: true,
+      data: newService,
+      message: "Service created successfully"
+    }, { status: 201 });
+  } catch (error) {
+    console.error("Error creating service:", error);
+    if (error instanceof Error) {
+      return NextResponse.json<ApiResponse<null>>({
+        success: false,
+        error: error.message
+      }, { status: 400 });
+    }
     return NextResponse.json<ApiResponse<null>>({
       success: false,
       error: "Internal server error"
