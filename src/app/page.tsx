@@ -1,60 +1,12 @@
 import Link from "next/link";
 import { Star, Scissors, Palette, Sparkles, Users, Award, Eye, Heart } from "lucide-react";
+import Hero from "@/components/Hero";
 
 export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-pink-50 to-purple-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                Enhance Your Natural{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-purple-600">
-                  Beauty
-                </span>
-              </h1>
-              <p className="text-xl text-gray-600 mb-8">
-                Professional beauty services including brows, lashes, skincare, and more.
-                Our expert team helps you look and feel your absolute best.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/dashboard"
-                  className="bg-gradient-to-r from-pink-600 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:from-pink-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
-                >
-                  Book Appointment
-                </Link>
-                <Link
-                  href="/services"
-                  className="border-2 border-pink-600 text-pink-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-pink-600 hover:text-white transition-all duration-300"
-                >
-                  View Services
-                </Link>
-              </div>
-            </div>
-            <div className="relative">
-              <div className="bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl p-8 text-white">
-                <div className="flex items-center space-x-2 mb-4">
-                  <Star className="w-5 h-5 fill-current" />
-                  <span className="font-semibold">Special Offer</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-2">20% Off First Visit</h3>
-                <p className="text-pink-100 mb-4">
-                  New clients get 20% off their first service. Book now and enhance your beauty!
-                </p>
-                <Link
-                  href="/dashboard"
-                  className="bg-white text-pink-600 px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-                >
-                  Claim Offer
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Hero />
 
       {/* Services Preview */}
       <section className="py-20 bg-white">
@@ -203,7 +155,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/dashboard"
+              href="/book-appointment"
               className="bg-white text-pink-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105"
             >
               Book Now

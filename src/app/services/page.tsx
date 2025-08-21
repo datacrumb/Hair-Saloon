@@ -143,7 +143,7 @@ export default function Services() {
             Our Beauty Services
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Discover our comprehensive range of beauty services designed to enhance your natural beauty 
+            Discover our comprehensive range of beauty services designed to enhance your natural beauty
             and boost your confidence. Located in St. John Shopping Centre, Liverpool - from brows to body, we&apos;ve got you covered.
           </p>
         </div>
@@ -163,10 +163,10 @@ export default function Services() {
                       {service.category}
                     </span>
                   </div>
-                  
+
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{service.name}</h3>
                   <p className="text-gray-600 mb-4">{service.description}</p>
-                  
+
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-2xl font-bold text-pink-600">{service.price}</span>
                     <span className="text-sm text-gray-500">{service.duration}</span>
@@ -181,9 +181,12 @@ export default function Services() {
                     ))}
                   </ul>
 
-                  <button className="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-pink-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
+                  <a
+                    href="/book-appointment"
+                    className="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-pink-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 inline-block text-center"
+                  >
                     Book Appointment
-                  </button>
+                  </a>
                 </div>
               </div>
             );
@@ -198,9 +201,12 @@ export default function Services() {
           <p className="text-xl text-pink-100 mb-6">
             Book your appointment today and experience the difference that professional beauty care can make.
           </p>
-          <button className="bg-white text-pink-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+          <a
+            href="/book-appointment"
+            className="bg-white text-pink-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 inline-block"
+          >
             Book Your Appointment
-          </button>
+          </a>
         </div>
       </div>
     </div>

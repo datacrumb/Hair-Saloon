@@ -15,7 +15,7 @@ const Footer = () => {
               <span className="text-xl font-bold">Beauty Salon</span>
             </div>
             <p className="text-gray-300 mb-4">
-              Professional beauty services with a focus on enhancing your natural beauty. 
+              Professional beauty services with a focus on enhancing your natural beauty.
               We offer comprehensive beauty treatments including brows, lashes, skincare, and more.
             </p>
             <div className="flex space-x-4">
@@ -56,7 +56,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/dashboard" className="text-gray-300 hover:text-pink-500 transition-colors">
+                <Link href="/book-appointment" className="text-gray-300 hover:text-pink-500 transition-colors">
                   Book Appointment
                 </Link>
               </li>
@@ -67,22 +67,22 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Info</h3>
             <div className="space-y-3">
-                             <div className="flex items-center space-x-3">
-                 <MapPin className="w-5 h-5 text-pink-500" />
-                 <span className="text-gray-300">St. John Shopping Centre, Liverpool, UK</span>
-               </div>
-               <div className="flex items-center space-x-3">
-                 <Phone className="w-5 h-5 text-pink-500" />
-                 <span className="text-gray-300">+44 151 792 0830</span>
-               </div>
-               <div className="flex items-center space-x-3">
-                 <Mail className="w-5 h-5 text-pink-500" />
-                 <span className="text-gray-300">info@beautysalon.com</span>
-               </div>
-               <div className="flex items-center space-x-3">
-                 <Clock className="w-5 h-5 text-pink-500" />
-                 <span className="text-gray-300">Mon-Fri: 09:00-17:00, Sat: 09:00-17:30</span>
-               </div>
+              <div className="flex items-center space-x-3">
+                <MapPin className="w-5 h-5 text-pink-500" />
+                <span className="text-gray-300">St. John Shopping Centre, Liverpool, UK</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Phone className="w-5 h-5 text-pink-500" />
+                <span className="text-gray-300">+44 151 792 0830</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Mail className="w-5 h-5 text-pink-500" />
+                <span className="text-gray-300">info@beautysalon.com</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Clock className="w-5 h-5 text-pink-500" />
+                <span className="text-gray-300">Mon-Fri: 09:00-17:00, Sat: 09:00-17:30</span>
+              </div>
             </div>
           </div>
         </div>
