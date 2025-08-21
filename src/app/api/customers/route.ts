@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { customerSchema, ApiResponse, Customer } from "@/lib/types";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,7 +9,7 @@ export async function GET(request: NextRequest) {
     const phone = searchParams.get("phone");
     const email = searchParams.get("email");
 
-    const where: any = {};
+    const where: Prisma.CustomerWhereInput = {};
     
     if (phone) {
       where.phone = phone;
@@ -33,9 +34,18 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    // Convert null values to undefined for API response
+    const customersWithUndefinedNulls = customers.map(customer => ({
+      ...customer,
+      email: customer.email || undefined,
+      address: customer.address || undefined,
+      dateOfBirth: customer.dateOfBirth ? customer.dateOfBirth.toISOString() : undefined,
+      notes: customer.notes || undefined,
+    }));
+
     return NextResponse.json<ApiResponse<Customer[]>>({
       success: true,
-      data: customers
+      data: customersWithUndefinedNulls
     });
   } catch (error) {
     console.error("Error fetching customers:", error);
@@ -65,6 +75,7 @@ export async function POST(request: NextRequest) {
 
     const newCustomer = await prisma.customer.create({
       data: {
+        id: validatedData.id, // Use the provided ID
         name: validatedData.name,
         phone: validatedData.phone,
         email: validatedData.email || null,
@@ -74,9 +85,18 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    // Convert null values to undefined for API response
+    const customerWithUndefinedNulls = {
+      ...newCustomer,
+      email: newCustomer.email || undefined,
+      address: newCustomer.address || undefined,
+      dateOfBirth: newCustomer.dateOfBirth ? newCustomer.dateOfBirth.toISOString() : undefined,
+      notes: newCustomer.notes || undefined,
+    };
+
     return NextResponse.json<ApiResponse<Customer>>({
       success: true,
-      data: newCustomer,
+      data: customerWithUndefinedNulls,
       message: "Customer created successfully"
     }, { status: 201 });
   } catch (error) {

@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { Calendar, Clock, User, Phone, Mail, Scissors } from "lucide-react";
+import { Calendar, User, Mail, Scissors } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
-import { appointmentFormSchema, AppointmentFormData } from "@/lib/types";
+import { appointmentFormSchema, AppointmentFormData, Service } from "@/lib/types";
 import { useCustomerByPhone, useCreateAppointment, useServices, useStylists } from "@/lib/hooks/useApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,8 +35,7 @@ interface AppointmentFormProps {
 export function AppointmentForm({ isWalkIn = false, onSuccess }: AppointmentFormProps) {
   const { user } = useUser();
   const [searchPhone, setSearchPhone] = useState("");
-  const [selectedService, setSelectedService] = useState<any>(null);
-  const [selectedStylist, setSelectedStylist] = useState<any>(null);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
 
   // Get full name from Clerk user
   const getFullName = () => {
@@ -236,7 +235,7 @@ export function AppointmentForm({ isWalkIn = false, onSuccess }: AppointmentForm
                       onValueChange={(value) => {
                         field.onChange(value);
                         const service = services?.find(s => s.id === value);
-                        setSelectedService(service);
+                        setSelectedService(service || null);
                       }}
                       disabled={servicesLoading}
                     >
@@ -272,8 +271,6 @@ export function AppointmentForm({ isWalkIn = false, onSuccess }: AppointmentForm
                     <Select
                       onValueChange={(value) => {
                         field.onChange(value);
-                        const stylist = stylists?.find(s => s.id === value);
-                        setSelectedStylist(stylist);
                       }}
                       disabled={stylistsLoading}
                     >

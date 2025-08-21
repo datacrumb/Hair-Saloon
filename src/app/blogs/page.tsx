@@ -139,7 +139,7 @@ export default function Blogs() {
             Still Have Questions?
           </h2>
           <p className="text-xl text-pink-100 mb-6">
-            We're here to help! Contact us for personalized advice and expert guidance.
+            We&apos;re here to help! Contact us for personalized advice and expert guidance.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { serviceSchema, ApiResponse, Service } from "@/lib/types";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,7 +9,7 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get("category");
     const isActive = searchParams.get("isActive");
 
-    const where: any = {};
+    const where: Prisma.ServiceWhereInput = {};
     
     if (category) {
       where.category = category;
@@ -25,9 +26,16 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    // Convert Decimal to number and null to undefined for API response
+    const servicesWithNumberPrice = services.map(service => ({
+      ...service,
+      price: Number(service.price),
+      description: service.description || undefined,
+    }));
+
     return NextResponse.json<ApiResponse<Service[]>>({
       success: true,
-      data: services
+      data: servicesWithNumberPrice
     });
   } catch (error) {
     console.error("Error fetching services:", error);
@@ -54,9 +62,16 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    // Convert Decimal to number and null to undefined for API response
+    const serviceWithNumberPrice = {
+      ...newService,
+      price: Number(newService.price),
+      description: newService.description || undefined,
+    };
+
     return NextResponse.json<ApiResponse<Service>>({
       success: true,
-      data: newService,
+      data: serviceWithNumberPrice,
       message: "Service created successfully"
     }, { status: 201 });
   } catch (error) {

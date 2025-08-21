@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Star, Scissors, Palette, Sparkles, Users, Award } from "lucide-react";
 
 export default function Home() {

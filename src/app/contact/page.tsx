@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ export default function Contact() {
     e.preventDefault();
     // Handle form submission here
     console.log("Form submitted:", formData);
-    alert("Thank you for your message! We'll get back to you soon.");
+    toast.success("Thank you for your message! We&apos;ll get back to you soon.");
     setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
   };
 
@@ -36,7 +37,7 @@ export default function Contact() {
             Contact Us
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            We'd love to hear from you! Get in touch with us for appointments, 
+            We&apos;d love to hear from you! Get in touch with us for appointments, 
             questions, or just to say hello.
           </p>
         </div>
@@ -47,8 +48,8 @@ export default function Contact() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Get In Touch</h2>
               <p className="text-gray-600 mb-8">
-                Whether you're looking to book an appointment, have questions about our services, 
-                or want to learn more about our salon, we're here to help!
+                Whether you&apos;re looking to book an appointment, have questions about our services, 
+                or want to learn more about our salon, we&apos;re here to help!
               </p>
             </div>
 

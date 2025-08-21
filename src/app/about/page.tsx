@@ -65,7 +65,7 @@ export default function About() {
               About Elegance Hair Salon
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              For over a decade, we've been creating beautiful transformations and building 
+              For over a decade, we&apos;ve been creating beautiful transformations and building 
               lasting relationships with our valued clients. Our commitment to excellence 
               and passion for beauty drives everything we do.
             </p>
@@ -91,9 +91,9 @@ export default function About() {
                   their unique expertise and creative vision to our salon.
                 </p>
                 <p>
-                  Over the years, we've had the privilege of serving thousands of clients, 
+                  Over the years, we&apos;ve had the privilege of serving thousands of clients, 
                   from brides on their wedding day to professionals looking for the perfect 
-                  cut, and families who trust us with their children's hair care needs.
+                  cut, and families who trust us with their children&apos;s hair care needs.
                 </p>
                 <p>
                   Our commitment to continuous education and staying current with the latest 
@@ -105,7 +105,7 @@ export default function About() {
             <div className="bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl p-8 text-white">
               <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
               <p className="text-lg mb-6">
-                To enhance our clients' natural beauty and boost their confidence through 
+                To enhance our clients&apos; natural beauty and boost their confidence through 
                 expert hair care services, delivered with passion, professionalism, and 
                 personalized attention.
               </p>

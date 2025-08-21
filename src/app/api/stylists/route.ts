@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stylistSchema, ApiResponse, Stylist } from "@/lib/types";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function GET(request: NextRequest) {
   try {
@@ -8,7 +9,7 @@ export async function GET(request: NextRequest) {
     const isActive = searchParams.get("isActive");
     const specialty = searchParams.get("specialty");
 
-    const where: any = {};
+    const where: Prisma.StylistWhereInput = {};
     
     if (isActive !== null) {
       where.isActive = isActive === 'true';
@@ -37,9 +38,15 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    // Convert null values to undefined for API response
+    const stylistsWithUndefinedNulls = stylists.map(stylist => ({
+      ...stylist,
+      phone: stylist.phone || undefined,
+    }));
+
     return NextResponse.json<ApiResponse<Stylist[]>>({
       success: true,
-      data: stylists
+      data: stylistsWithUndefinedNulls
     });
   } catch (error) {
     console.error("Error fetching stylists:", error);
@@ -77,9 +84,15 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    // Convert null values to undefined for API response
+    const stylistWithUndefinedNulls = {
+      ...newStylist,
+      phone: newStylist.phone || undefined,
+    };
+
     return NextResponse.json<ApiResponse<Stylist>>({
       success: true,
-      data: newStylist,
+      data: stylistWithUndefinedNulls,
       message: "Stylist created successfully"
     }, { status: 201 });
   } catch (error) {

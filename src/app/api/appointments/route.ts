@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { appointmentSchema, ApiResponse, Appointment } from "@/lib/types";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function GET(request: NextRequest) {
   try {
@@ -9,7 +10,7 @@ export async function GET(request: NextRequest) {
     const customerPhone = searchParams.get("customerPhone");
 
     // Build where clause for filtering
-    const where: any = {};
+    const where: Prisma.AppointmentWhereInput = {};
     
     if (date) {
       where.date = date;
@@ -31,9 +32,15 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    // Convert Decimal to number for API response
+    const appointmentsWithNumberPrice = appointments.map(appointment => ({
+      ...appointment,
+      price: Number(appointment.price)
+    }));
+
     return NextResponse.json<ApiResponse<Appointment[]>>({
       success: true,
-      data: appointments
+      data: appointmentsWithNumberPrice
     });
   } catch (error) {
     console.error("Error fetching appointments:", error);
@@ -76,6 +83,7 @@ export async function POST(request: NextRequest) {
     if (!customer) {
       customer = await prisma.customer.create({
         data: {
+          id: validatedData.customerId, // Use the provided customerId
           name: validatedData.customerName,
           phone: validatedData.customerPhone,
           email: validatedData.customerEmail || null,
@@ -135,9 +143,15 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    // Convert Decimal to number for API response
+    const appointmentWithNumberPrice = {
+      ...newAppointment,
+      price: Number(newAppointment.price)
+    };
+
     return NextResponse.json<ApiResponse<Appointment>>({
       success: true,
-      data: newAppointment,
+      data: appointmentWithNumberPrice,
       message: "Appointment booked successfully"
     }, { status: 201 });
   } catch (error) {

@@ -135,6 +135,7 @@ async function main() {
   const customers = await Promise.all([
     prisma.customer.create({
       data: {
+        id: "customer_1",
         name: "Jane Smith",
         phone: "555-0123",
         email: "jane.smith@email.com",
@@ -146,6 +147,7 @@ async function main() {
     }),
     prisma.customer.create({
       data: {
+        id: "customer_2",
         name: "Mike Johnson",
         phone: "555-0456",
         email: "mike.j@email.com",
@@ -157,6 +159,7 @@ async function main() {
     }),
     prisma.customer.create({
       data: {
+        id: "customer_3",
         name: "Lisa Davis",
         phone: "555-0789",
         email: "lisa.davis@email.com",
