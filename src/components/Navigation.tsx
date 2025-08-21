@@ -29,9 +29,9 @@ const Navigation = () => {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg">E</span>
+              <span className="text-white font-bold text-lg">B</span>
             </div>
-            <span className="text-xl font-bold text-gray-800">Elegance Hair Salon</span>
+            <span className="text-xl font-bold text-gray-800">Beauty Salon</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -61,11 +61,11 @@ const Navigation = () => {
               <span>Book Appointment</span>
             </Link>
             <a
-              href="tel:+1234567890"
+              href="tel:+441517920830"
               className="flex items-center space-x-2 text-gray-600 hover:text-pink-600 transition-colors duration-200"
             >
               <Phone className="w-4 h-4" />
-              <span>(123) 456-7890</span>
+              <span>+44 151 792 0830</span>
             </a>
             
             {/* Auth Section */}
@@ -120,13 +120,13 @@ const Navigation = () => {
                   <Calendar className="w-4 h-4" />
                   <span>Book Appointment</span>
                 </Link>
-                <a
-                  href="tel:+1234567890"
-                  className="flex items-center justify-center space-x-2 text-gray-600 hover:text-pink-600 transition-colors duration-200"
-                >
-                  <Phone className="w-4 h-4" />
-                  <span>(123) 456-7890</span>
-                </a>
+                                 <a
+                   href="tel:+441517920830"
+                   className="flex items-center justify-center space-x-2 text-gray-600 hover:text-pink-600 transition-colors duration-200"
+                 >
+                   <Phone className="w-4 h-4" />
+                   <span>+44 151 792 0830</span>
+                 </a>
                 
                 {/* Mobile Auth Section */}
                 <div className="flex items-center justify-center gap-4 pt-2">

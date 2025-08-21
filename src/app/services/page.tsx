@@ -1,109 +1,137 @@
-import { Scissors, Palette, Sparkles, Clock, DollarSign } from "lucide-react";
+import { Star, Scissors, Palette, Sparkles, Eye, Heart, Zap, Users } from "lucide-react";
 
 export default function Services() {
   const services = [
     {
-      category: "Hair Cutting",
-      icon: Scissors,
-      items: [
-        {
-          name: "Women's Haircut",
-          description: "Professional cut and style tailored to your face shape and lifestyle",
-          duration: "45-60 min",
-          price: "$45-75"
-        },
-        {
-          name: "Men's Haircut",
-          description: "Classic or modern cuts with precision styling",
-          duration: "30-45 min",
-          price: "$25-45"
-        },
-        {
-          name: "Kid's Haircut (12 & under)",
-          description: "Gentle and fun haircuts for children",
-          duration: "20-30 min",
-          price: "$20-30"
-        },
-        {
-          name: "Bang Trim",
-          description: "Quick trim to maintain your bangs",
-          duration: "15 min",
-          price: "$15"
-        }
+      id: 1,
+      name: "Eyebrow Hair Extensions",
+      description: "Professional eyebrow extensions to enhance your natural brows and create fuller, more defined arches.",
+      price: "$75",
+      duration: "60 min",
+      category: "Brows & Lashes",
+      icon: Eye,
+      features: [
+        "Natural-looking extensions",
+        "Customized to your face shape",
+        "Long-lasting results",
+        "Professional application"
       ]
     },
     {
-      category: "Hair Coloring",
-      icon: Palette,
-      items: [
-        {
-          name: "Full Color",
-          description: "Complete hair color transformation with premium products",
-          duration: "2-3 hours",
-          price: "$80-150"
-        },
-        {
-          name: "Highlights",
-          description: "Partial or full highlights for dimension and brightness",
-          duration: "2-3 hours",
-          price: "$90-180"
-        },
-        {
-          name: "Balayage",
-          description: "Hand-painted highlights for natural-looking dimension",
-          duration: "3-4 hours",
-          price: "$120-250"
-        },
-        {
-          name: "Color Correction",
-          description: "Fix previous color issues and achieve desired results",
-          duration: "3-5 hours",
-          price: "$150-300"
-        },
-        {
-          name: "Root Touch-up",
-          description: "Maintain your color between full appointments",
-          duration: "1-1.5 hours",
-          price: "$60-100"
-        }
+      id: 2,
+      name: "Eyelash Extensions",
+      description: "Luxurious eyelash extensions for dramatic, voluminous lashes that enhance your natural beauty.",
+      price: "$120",
+      duration: "90 min",
+      category: "Brows & Lashes",
+      icon: Eye,
+      features: [
+        "Individual lash application",
+        "Multiple style options",
+        "Gentle on natural lashes",
+        "Professional maintenance"
       ]
     },
     {
-      category: "Styling & Treatments",
+      id: 3,
+      name: "Microblading Tattooing",
+      description: "Semi-permanent eyebrow tattooing technique that creates natural-looking, defined brows.",
+      price: "$350",
+      duration: "120 min",
+      category: "Brows & Lashes",
+      icon: Heart,
+      features: [
+        "Semi-permanent results",
+        "Natural hair-like strokes",
+        "Customized design",
+        "Touch-up included"
+      ]
+    },
+    {
+      id: 4,
+      name: "Dermaplaning Facial",
+      description: "Advanced exfoliation treatment that removes dead skin cells and peach fuzz for radiant, smooth skin.",
+      price: "$85",
+      duration: "45 min",
+      category: "Skincare",
       icon: Sparkles,
-      items: [
-        {
-          name: "Blowout & Style",
-          description: "Professional blowout with your choice of styling",
-          duration: "45-60 min",
-          price: "$35-55"
-        },
-        {
-          name: "Updo/Special Occasion",
-          description: "Elegant styling for weddings, proms, and special events",
-          duration: "1-2 hours",
-          price: "$65-120"
-        },
-        {
-          name: "Deep Conditioning Treatment",
-          description: "Intensive moisture treatment for damaged or dry hair",
-          duration: "30-45 min",
-          price: "$25-40"
-        },
-        {
-          name: "Keratin Treatment",
-          description: "Smoothing treatment for frizzy or unruly hair",
-          duration: "2-3 hours",
-          price: "$200-350"
-        },
-        {
-          name: "Hair Extensions",
-          description: "Professional extension application and styling",
-          duration: "3-5 hours",
-          price: "$300-800"
-        }
+      features: [
+        "Deep exfoliation",
+        "Removes peach fuzz",
+        "Improves product absorption",
+        "Immediate results"
+      ]
+    },
+    {
+      id: 5,
+      name: "Full Body Waxing",
+      description: "Professional waxing services for smooth, hair-free skin from head to toe.",
+      price: "$150",
+      duration: "60 min",
+      category: "Hair Removal",
+      icon: Zap,
+      features: [
+        "Professional waxing",
+        "All body areas",
+        "Long-lasting results",
+        "Smooth finish"
+      ]
+    },
+    {
+      id: 6,
+      name: "Indian Aromatic Massage",
+      description: "Traditional Indian massage techniques with aromatic oils for deep relaxation and wellness.",
+      price: "$95",
+      duration: "75 min",
+      category: "Wellness",
+      icon: Heart,
+      features: [
+        "Traditional techniques",
+        "Aromatic oils",
+        "Deep relaxation",
+        "Stress relief"
+      ]
+    },
+    {
+      id: 7,
+      name: "Hair Styling",
+      description: "Professional hair styling services including cuts, color, and styling for all occasions.",
+      price: "$65",
+      duration: "60 min",
+      category: "Hair",
+      icon: Scissors,
+      features: [
+        "Professional styling",
+        "Cut and color",
+        "Special occasion styling",
+        "Expert consultation"
+      ]
+    },
+    {
+      id: 8,
+      name: "Botox Treatment",
+      description: "Professional Botox injections to reduce fine lines and wrinkles for a more youthful appearance.",
+      price: "$350",
+      duration: "30 min",
+      category: "Anti-Aging",
+      icon: Sparkles,
+      features: [
+        "Professional administration",
+        "Reduces fine lines",
+        "Natural results",
+        "Minimal downtime"
       ]
     }
+  ];
+
+  const categories = [
+    "All Services",
+    "Brows & Lashes",
+    "Skincare",
+    "Hair Removal",
+    "Wellness",
+    "Hair",
+    "Anti-Aging"
   ];
 
   return (
@@ -112,69 +140,67 @@ export default function Services() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Our Services
+            Our Beauty Services
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Discover our comprehensive range of professional hair services. 
-            From classic cuts to modern treatments, we have everything you need to look and feel your best.
+            Discover our comprehensive range of beauty services designed to enhance your natural beauty 
+            and boost your confidence. Located in St. John Shopping Centre, Liverpool - from brows to body, we&apos;ve got you covered.
           </p>
         </div>
 
-        {/* Services */}
-        <div className="space-y-16">
-          {services.map((service, index) => (
-            <div key={index} className="bg-white rounded-2xl shadow-lg p-8">
-              <div className="flex items-center space-x-4 mb-8">
-                <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
-                  <service.icon className="w-6 h-6 text-white" />
-                </div>
-                <h2 className="text-3xl font-bold text-gray-900">{service.category}</h2>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {service.items.map((item, itemIndex) => (
-                  <div key={itemIndex} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{item.name}</h3>
-                    <p className="text-gray-600 mb-4">{item.description}</p>
-                    <div className="flex items-center justify-between text-sm text-gray-500">
-                      <div className="flex items-center space-x-1">
-                        <Clock className="w-4 h-4" />
-                        <span>{item.duration}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <DollarSign className="w-4 h-4" />
-                        <span className="font-semibold text-pink-600">{item.price}</span>
-                      </div>
+        {/* Services Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((service) => {
+            const IconComponent = service.icon;
+            return (
+              <div key={service.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center">
+                      <IconComponent className="w-6 h-6 text-white" />
                     </div>
+                    <span className="text-sm text-pink-600 font-medium bg-pink-50 px-3 py-1 rounded-full">
+                      {service.category}
+                    </span>
                   </div>
-                ))}
+                  
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{service.name}</h3>
+                  <p className="text-gray-600 mb-4">{service.description}</p>
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-2xl font-bold text-pink-600">{service.price}</span>
+                    <span className="text-sm text-gray-500">{service.duration}</span>
+                  </div>
+
+                  <ul className="space-y-2 mb-6">
+                    {service.features.map((feature, index) => (
+                      <li key={index} className="flex items-center space-x-2 text-sm text-gray-600">
+                        <Star className="w-4 h-4 text-pink-500 fill-current" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button className="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-pink-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
+                    Book Appointment
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* CTA Section */}
         <div className="mt-20 bg-gradient-to-r from-pink-600 to-purple-600 rounded-2xl p-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to Book Your Service?
+            Ready to Transform Your Look?
           </h2>
           <p className="text-xl text-pink-100 mb-6">
-            Contact us to schedule your appointment or book online for your convenience.
+            Book your appointment today and experience the difference that professional beauty care can make.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="/dashboard"
-              className="bg-white text-pink-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-            >
-              Book Online
-            </a>
-            <a
-              href="tel:+1234567890"
-              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-pink-600 transition-colors"
-            >
-              Call (123) 456-7890
-            </a>
-          </div>
+          <button className="bg-white text-pink-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+            Book Your Appointment
+          </button>
         </div>
       </div>
     </div>

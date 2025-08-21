@@ -61,9 +61,10 @@ export default function Contact() {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-1">Address</h3>
                   <p className="text-gray-600">
-                    123 Beauty Street<br />
-                    City, State 12345<br />
-                    United States
+                    St. John Shopping Centre<br />
+                    Upper Mall Council Market<br />
+                    Shop No-3 & 4<br />
+                    Liverpool, United Kingdom
                   </p>
                 </div>
               </div>
@@ -75,8 +76,8 @@ export default function Contact() {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-1">Phone</h3>
                   <p className="text-gray-600">
-                    <a href="tel:+1234567890" className="hover:text-pink-600 transition-colors">
-                      (123) 456-7890
+                    <a href="tel:+441517920830" className="hover:text-pink-600 transition-colors">
+                      +44 151 792 0830
                     </a>
                   </p>
                 </div>
@@ -89,8 +90,8 @@ export default function Contact() {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-1">Email</h3>
                   <p className="text-gray-600">
-                    <a href="mailto:info@elegancehair.com" className="hover:text-pink-600 transition-colors">
-                      info@elegancehair.com
+                    <a href="mailto:info@beautysalon.com" className="hover:text-pink-600 transition-colors">
+                      info@beautysalon.com
                     </a>
                   </p>
                 </div>
@@ -103,8 +104,8 @@ export default function Contact() {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-1">Hours</h3>
                   <div className="text-gray-600">
-                    <p><strong>Monday - Friday:</strong> 9:00 AM - 8:00 PM</p>
-                    <p><strong>Saturday:</strong> 9:00 AM - 6:00 PM</p>
+                    <p><strong>Monday - Friday:</strong> 09:00 - 17:00</p>
+                    <p><strong>Saturday:</strong> 09:00 - 17:30</p>
                     <p><strong>Sunday:</strong> Closed</p>
                   </div>
                 </div>
@@ -169,7 +170,7 @@ export default function Contact() {
                     value={formData.phone}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-colors"
-                    placeholder="(123) 456-7890"
+                    placeholder="+44 151 792 0830"
                   />
                 </div>
                 <div>

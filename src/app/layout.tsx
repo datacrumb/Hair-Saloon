@@ -18,20 +18,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Elegance Hair Salon - Professional Hair Care Services",
+  title: "The IBL Creation",
   description: "Professional hair salon offering cutting, coloring, styling, and treatments. Book your appointment online or visit us for walk-in services.",
   keywords: "hair salon, hair cutting, hair coloring, hair styling, beauty salon, appointment booking",
-  authors: [{ name: "Elegance Hair Salon" }],
-  creator: "Elegance Hair Salon",
+  authors: [{ name: "The IBL Creation" }],
+  creator: "The IBL Creation",
   openGraph: {
-    title: "Elegance Hair Salon - Professional Hair Care Services",
+    title: "The IBL Creation",
     description: "Professional hair salon offering cutting, coloring, styling, and treatments.",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Elegance Hair Salon - Professional Hair Care Services",
+    title: "The IBL Creation",
     description: "Professional hair salon offering cutting, coloring, styling, and treatments.",
   },
   robots: {
